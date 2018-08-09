@@ -1,0 +1,13 @@
+remote:
+  fw: vsrx01
+  network: 192.168.1.0/24
+vpn_interface:
+  name: st0
+  unit: 0
+  description: to_vsrx01
+  address: 10.10.10.2/30
+vpn:
+  gateway:
+    remote_address: 10.0.0.1
+    local_interface: ge-0/0/1.0
+

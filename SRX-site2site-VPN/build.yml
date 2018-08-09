@@ -1,0 +1,10 @@
+- name: Build IPSec VPN configuration
+  hosts: vsrx
+  connection: local
+  gather_facts: no
+  roles:
+    - Juniper.junos
+  tasks:
+    - name: Build IPSec configuration
+      template: src=ipsec_template.j2 dest={{ playbook_dir }}/Configs/{{ inventory_hostname }}.set
+

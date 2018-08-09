@@ -1,0 +1,29 @@
+---
+#######################################################################################
+# Juniper SRX Multipoint IPSec VPN - IKE/IPSec Configuration Values
+# 
+# These values are taken from the Junos/SRX CLI and can be changed to suit your
+# environment. Definitely change the ike.policy.psk value!!
+#######################################################################################
+
+ike:
+  proposal:
+    name: dh24-sha256-aes256
+    auth_method: pre-shared-keys
+    dh_group: group24
+    auth_algorithm: sha-256
+    encrypt_algorithm: aes-256-cbc
+  policy:
+    name: p1-ike-main-psk
+    mode: main
+    psk: Juniper123
+ipsec:
+  proposal:
+    name: esp-sha256-aes256
+    protocol: esp
+    auth_algorithm: hmac-sha-256-128
+    encrypt_algorithm: aes-256-cbc
+  policy:
+    name: p2-esp-pfs
+    pfs_keys: group24
+

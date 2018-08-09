@@ -1,0 +1,48 @@
+#######################################################################################
+# vsrx02: Juniper SRX Multipoint IPSec VPN - Host Configuration File
+# 
+# Options:
+# - hub: TRUE if the hub, FALSE if spoke
+#######################################################################################
+hub: FALSE
+
+#######################################################################################
+# vpn_interface options:
+# - name: should always be st0
+# - unit: should be 0 most of the time but can be any acceptable value
+# - description: description of the interface. NO spaces. 30 character limit.
+# - address: The IP address with / mask notation
+#######################################################################################
+vpn_interface:
+  name: st0
+  unit: 0
+  description: to_vsrx01
+  address: 10.10.10.2/24
+
+#######################################################################################
+# Remote Dictionary
+# remote.networks: remote networks that this device needs to access over the VPN
+# - fw: The name of the remote SRX which this network resides behind
+# - st_addr: The st0 interface IP of the remote SRX
+# - network: The remote network this SRX needs access to. IP/Mask notation.
+#
+# remote.gateways: Specifics of other VPN endpoints
+# - fw: The name of the remote SRX
+# - remote_address: The untrust IP address where this tunnel will terminate
+# - local_interface: The local interface that is the source of the tunnel
+#######################################################################################
+remote:
+  networks:
+    - fw: vsrx01
+      st_addr: 10.10.10.1
+      network: 192.168.1.0/24
+    - fw: vsrx01
+      st_addr: 10.10.10.1
+      network: 192.168.11.0/24
+    - fw: vsrx03
+      st_addr: 10.10.10.3
+      network: 192.168.3.0/24
+  gateways:
+    - fw: vsrx01
+      remote_address: 10.1.1.1
+      local_interface: ge-0/0/1.0

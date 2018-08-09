@@ -1,0 +1,23 @@
+- name: Build and deploy IPSec VPN configuration
+  hosts: vsrx
+  connection: local
+  gather_facts: no
+  roles:
+    - Juniper.junos
+  tasks:
+    - name: Build IPSec configuration
+      template: src=ipsec_template.j2 dest={{ playbook_dir }}/Configs/{{ inventory_hostname }}.set
+
+    - name: Deploy IPSec VPN to devices ... please wait
+      junos_install_config:
+        host={{ ansible_ssh_host }}
+        port={{ ansible_ssh_port }}
+        user=root
+        passwd=Juniper
+        comment="configured by ansible"
+        file={{ playbook_dir }}/Configs/{{ inventory_hostname }}.set
+#        logfile=changes.log
+
+
+
+

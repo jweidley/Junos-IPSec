@@ -1,0 +1,7 @@
+[vsrx]
+vsrx01	ansible_ssh_host=127.0.0.1 ansible_ssh_port=2221
+vsrx02	ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222
+
+# Synatx for pushing to vagrant vSRX.
+#vsrx1	ansible_ssh_host=127.0.0.1 ansible_ssh_port=2221
+#vsrx2	ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222

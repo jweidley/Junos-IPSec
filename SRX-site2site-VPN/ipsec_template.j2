@@ -1,0 +1,41 @@
+set interfaces {{ vpn_interface.name }} unit {{ vpn_interface.unit }} description "{{ vpn_interface.description }}"
+set interfaces {{ vpn_interface.name }} unit {{ vpn_interface.unit }} family inet address {{ vpn_interface.address }}
+
+set routing-options static route {{ remote.network }} next-hop {{ vpn_interface.name }}.{{ vpn_interface.unit }}
+
+set security ike proposal ike-phase1-proposal authentication-method {{ ike.proposal.auth_method }}
+set security ike proposal ike-phase1-proposal dh-group {{ ike.proposal.dh_group }}
+set security ike proposal ike-phase1-proposal authentication-algorithm {{ ike.proposal.auth_algorithm }}
+set security ike proposal ike-phase1-proposal encryption-algorithm {{ ike.proposal.encrypt_algorithm }}
+
+set security ike policy ike-phase1-policy mode {{ ike.policy.mode }}
+set security ike policy ike-phase1-policy proposals ike-phase1-proposal
+set security ike policy ike-phase1-policy pre-shared-key ascii-text {{ ike.policy.psk }}
+
+set security ike gateway {{ remote.fw }} ike-policy ike-phase1-policy
+set security ike gateway {{ remote.fw }} address {{ vpn.gateway.remote_address }}
+set security ike gateway {{ remote.fw }} external-interface {{ vpn.gateway.local_interface }}
+
+set security ipsec proposal ipsec-phase2-proposal protocol {{ ipsec.proposal.protocol }}
+set security ipsec proposal ipsec-phase2-proposal authentication-algorithm {{ ipsec.proposal.auth_algorithm }}
+set security ipsec proposal ipsec-phase2-proposal encryption-algorithm {{ ipsec.proposal.encrypt_algorithm }}
+
+set security ipsec policy ipsec-phase2-policy perfect-forward-secrecy keys {{ ipsec.policy.pfs_keys }}
+set security ipsec policy ipsec-phase2-policy proposals ipsec-phase2-proposal
+
+set security ipsec vpn ike-vpn-{{ remote.fw }} bind-interface {{ vpn_interface.name }}.{{ vpn_interface.unit }}
+set security ipsec vpn ike-vpn-{{ remote.fw }} ike gateway {{ remote.fw }}
+set security ipsec vpn ike-vpn-{{ remote.fw }} ike ipsec-policy ipsec-phase2-policy
+set security ipsec vpn ike-vpn-{{ remote.fw }} establish-tunnels immediately
+
+set security zones security-zone vpn interfaces {{ vpn_interface.name }}.{{ vpn_interface.unit }}
+
+set security policies from-zone trust to-zone vpn policy 1 match source-address any
+set security policies from-zone trust to-zone vpn policy 1 match destination-address any
+set security policies from-zone trust to-zone vpn policy 1 match application any
+set security policies from-zone trust to-zone vpn policy 1 then permit
+set security policies from-zone vpn to-zone trust policy 1 match source-address any
+set security policies from-zone vpn to-zone trust policy 1 match destination-address any
+set security policies from-zone vpn to-zone trust policy 1 match application any
+set security policies from-zone vpn to-zone trust policy 1 then permit
+
