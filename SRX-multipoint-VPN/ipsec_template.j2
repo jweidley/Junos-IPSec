@@ -4,6 +4,8 @@ set interfaces {{ vpn_interface.name }} unit {{ vpn_interface.unit }} family ine
 set interfaces {{ vpn_interface.name }} unit {{ vpn_interface.unit }} multipoint
 {% endif %}
 
+set security flow tcp-mss ipsec-vpn mss 1200
+
 {% for i in remote.networks %}
 set routing-options static route {{ i.network }} next-hop {{ i.st_addr }}
 {% endfor %}

@@ -3,6 +3,7 @@ set interfaces {{ vpn_interface.name }} unit {{ vpn_interface.unit }} family ine
 
 set routing-options static route {{ remote.network }} next-hop {{ vpn_interface.name }}.{{ vpn_interface.unit }}
 
+set security flow tcp-mss ipsec-vpn mss 1200
 set security ike proposal ike-phase1-proposal authentication-method {{ ike.proposal.auth_method }}
 set security ike proposal ike-phase1-proposal dh-group {{ ike.proposal.dh_group }}
 set security ike proposal ike-phase1-proposal authentication-algorithm {{ ike.proposal.auth_algorithm }}
